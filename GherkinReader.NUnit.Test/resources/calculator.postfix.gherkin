@@ -1,0 +1,22 @@
+Feature: Calculator Postfix API
+
+  Background:
+    Given   I am a user of Calculator API
+    And     I am using postfix notation
+
+  Scenario: I can sum two numbers
+    When    I send 3 4 +
+    Then    I obtain status 200
+    And     I obtain body 7 
+    
+  Scenario: I can sum any number of numbers
+    When    I send 3 4 5 6 7 ++ 2 3 4 ++
+    Then    I obtain status 200
+    And     I obtain body 34 
+    
+  @multiplication @skip
+  Scenario: I can multiply two numbers
+    When    I send 3 4 *
+    Then    I obtain status 200
+    And     I obtain body 12
+

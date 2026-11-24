@@ -1,0 +1,21 @@
+Feature: Gherkin Reader
+  Explain that a Gherkin File will be referenced by filename
+  
+  Background:
+    Given   I want to use the GherkinReader
+    
+  Scenario: Gherkin Reader successfully loads a Gherkin File
+    When    I load "gherkinreader.gherkin"
+    Then    I am successful
+    And     I have loaded 3 tests
+    And     the first test has 5 sentences
+    
+  Scenario: Gherkin Reader throws an error during load if there are multiple backgrounds
+    When    I load "gherkinreader.multiple_backgrounds.gherkin"
+    Then    I am not successful
+    And     I get an exception with message "Duplicated Background clause"
+    
+  Scenario: Gherkin Reader throws an error during load if a step is not implemented
+    When    I load "gherkinreader.not_implemented.gherkin"
+    Then    I am not successful
+    And     I get an exception with message "Step does not match any implementation"

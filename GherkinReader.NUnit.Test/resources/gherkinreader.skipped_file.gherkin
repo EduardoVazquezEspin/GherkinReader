@@ -1,0 +1,18 @@
+Feature: Gherkin Reader
+  Explain that a Gherkin File will be referenced by filename
+  
+  @skip
+  Background:
+    Given   I want to use the GherkinReader
+    
+  Scenario: Gherkin Reader successfully loads a Gherkin File
+    When    I load "gherkinreader.gherkin"
+    Then    I am successful
+    And     I have loaded 1 test
+    And     the first test has 5 sentences
+    
+  Scenario: Gherkin Reader successfully loads a Gherkin File
+    When    I load "gherkinreader.gherkin"
+    Then    I am successful
+    And     I have loaded 1 test
+    And     the first test has 5 sentences
