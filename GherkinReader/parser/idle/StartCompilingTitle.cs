@@ -1,11 +1,11 @@
 using System.Text.RegularExpressions;
 
-namespace Gherkin.parser.idle;
+namespace GherkinReader.parser.idle;
 
 internal class StartCompilingTitle<TContext> : IParser<TContext> where TContext : new()
 {
     private readonly Regex _featureTitleRegex = new (@"^\s*Feature:\s*(?<title>.*)\s*$", RegexOptions.IgnoreCase);
-    public bool Parse(string line, GherkinParser<TContext> context)
+    bool IParser<TContext>.Parse(string line, GherkinParser<TContext> context)
     {
         var titleMatch = _featureTitleRegex.Match(line);
         if (!titleMatch.Success)

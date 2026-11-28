@@ -1,10 +1,10 @@
 using System.Text.RegularExpressions;
 
-namespace Gherkin;
+namespace GherkinReader.model;
 
-public class GherkinSentence<TContext> : IGherkinSentence where TContext : new()
+public class GherkinSentence
 {
-    public string OriginalSentence { get; init; }
-    public Handler<TContext> Handler { get; init; }
+    public string OriginalSentence { get; init; } = null!;
+    public Handler Handler { get; init; } = null!;
     public GroupCollection? Groups { get; init; }
 }

@@ -1,11 +1,12 @@
 using System.Text.RegularExpressions;
-using Gherkin.parser.background;
-using Gherkin.parser.idle;
-using Gherkin.parser.common;
-using Gherkin.parser.test;
+using GherkinReader.model;
+using GherkinReader.parser.background;
+using GherkinReader.parser.common;
 using GherkinReader.parser.idle;
+using GherkinReader.parser.test;
+using GherkinReader.parser.title;
 
-namespace Gherkin.parser;
+namespace GherkinReader.parser;
 
 internal enum ParseState
 {
@@ -15,16 +16,26 @@ internal enum ParseState
     ParsingsTests
 }
 
-internal class GherkinParser<TContext>(
-    List<Handler<TContext>> givenHandlers, 
-    List<Handler<TContext>> whenHandlers, 
-    List<Handler<TContext>> thenHandlers
-) where TContext : new()
+internal class GherkinParser<TContext> where TContext : new()
 {
+    private readonly List<Handler> _givenHandlers;
+    private readonly List<Handler> _whenHandlers;
+    private readonly List<Handler> _thenHandlers;
+
+    public GherkinParser(
+        List<Handler> givenHandlers, 
+        List<Handler> whenHandlers,
+        List<Handler> thenHandlers)
+    {
+        _givenHandlers = givenHandlers;
+        _whenHandlers = whenHandlers;
+        _thenHandlers = thenHandlers;
+    }
+
     public ParseState State = ParseState.Idle;
     public Verb? LastVerb = null;
     public List<string> Tags = new();
-    public GherkinFile<TContext> File = new GherkinFile<TContext>
+    public readonly GherkinFile<TContext> File = new GherkinFile<TContext>
     {
         Tests = new(),
         Description = new (),
@@ -32,24 +43,24 @@ internal class GherkinParser<TContext>(
     };
     private readonly Dictionary<ParseState, IParser<TContext>[]> _parsers = new()
     {
-        { ParseState.Idle, [
+        { ParseState.Idle, new IParser<TContext>[]{
             new IgnoreEmptyLines<TContext>(), 
             new ParseTag<TContext>(), 
             new StartCompilingTitle<TContext>(), 
             new StartCompilingBackground<TContext>(), 
-            new StartParsingTest<TContext>()] },
-        { ParseState.ParsingTitle, [
+            new StartParsingTest<TContext>()} },
+        { ParseState.ParsingTitle, new IParser<TContext>[]{
             new FinishParsingSection<TContext>(),
-            new AddDescriptionLine<TContext>()] },
-        { ParseState.ParsingBackground, [
+            new AddDescriptionLine<TContext>()} },
+        { ParseState.ParsingBackground, new IParser<TContext>[]{
             new FinishParsingSection<TContext>(), 
-            new AddCommonStep<TContext>()] },
-        { ParseState.ParsingsTests, [
+            new AddCommonStep<TContext>()} },
+        { ParseState.ParsingsTests, new IParser<TContext>[]{
             new FinishParsingSection<TContext>(), 
-            new AddSentence<TContext>()]}
+            new AddSentence<TContext>()}}
     };
 
-    private Regex _skipTag = new ("^skip$", RegexOptions.IgnoreCase);
+    private readonly Regex _skipTag = new ("^skip$", RegexOptions.IgnoreCase);
     
     private void RemapSkipTag()
     {
@@ -82,27 +93,26 @@ internal class GherkinParser<TContext>(
         return File;
     }
     
-    public Handler<TContext>? GetHandler(Verb verb, string line, out GroupCollection? match)
+    public Handler? GetHandler(Verb verb, string line, out GroupCollection? match)
     {
         match = null;
-        List<Handler<TContext>> setToSearch = verb switch
+        List<Handler> setToSearch = verb switch
         {
-            Verb.Given => givenHandlers,
-            Verb.When => whenHandlers,
-            Verb.Then or _ => thenHandlers
+            Verb.Given => _givenHandlers,
+            Verb.When => _whenHandlers,
+            Verb.Then or _ => _thenHandlers
         };
 
-        for (int index = 0; index < setToSearch.Count; index++)
+        foreach (var handler in setToSearch)
         {
-            var handler = setToSearch[index];
-            if (handler is HandlerStringBase<TContext> handlerString)
+            if (handler is HandlerStringBase handlerString)
             {
                 if (string.Compare(handlerString.Sentence, line.Trim(), StringComparison.CurrentCultureIgnoreCase) == 0)
                     return handler;
                 continue;
             }
 
-            var regex = ((handler as HandlerRegexBase<TContext>)!).SentenceRegex;
+            var regex = ((handler as HandlerRegexBase)!).SentenceRegex;
             var localMatch = regex.Match(line.Trim());
             if (localMatch.Success)
             {

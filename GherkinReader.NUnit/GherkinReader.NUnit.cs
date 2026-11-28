@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Gherkin.NUnit;
+namespace GherkinReader.NUnit;
 
 public static class GherkinReaderNUnit<TSteps> where TSteps : IGherkinReader, new()
 {

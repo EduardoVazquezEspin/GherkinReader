@@ -1,8 +1,8 @@
-namespace Gherkin.parser.common;
+namespace GherkinReader.parser.title;
 
 internal class AddDescriptionLine<TContext> : IParser<TContext> where TContext : new()
 {
-    public bool Parse(string line, GherkinParser<TContext> context)
+    bool IParser<TContext>.Parse(string line, GherkinParser<TContext> context)
     {
         context.File.Description.Add(line);
         return true;

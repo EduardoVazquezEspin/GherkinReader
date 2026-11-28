@@ -1,15 +1,14 @@
-using System.Runtime.ExceptionServices;
 using System.Text;
-using System.Text.RegularExpressions;
 
-namespace Gherkin;
+namespace GherkinReader.model;
 
-public class TestException<T>(int index, GherkinTest<T> test)
-    : Exception(DecorateError(index, test)) where T : new()
+public class TestException<T> : Exception where T : new()
 {
     private const string Tab = "    ";
     private const string HereLeft = "  > ";
     private const string HereRight = " <";
+    
+    public TestException(int index, GherkinTest<T> test) : base(DecorateError(index, test)) { }
 
     private static string DecorateError(int index, GherkinTest<T> test)
     {
@@ -38,10 +37,10 @@ public class TestException<T>(int index, GherkinTest<T> test)
 
 public class GherkinTest<TContext> : IGherkinTest where TContext : new()
 {
-    internal string title { get; init; }
+    internal string title { get; init; } = null!;
     public string Title => title;
-    internal List<GherkinSentence<TContext>> sentences { get; init; }
-    public List<IGherkinSentence> Sentences => sentences.Select(IGherkinSentence (it) => it).ToList();
+    internal List<GherkinSentence> sentences { get; init; } = null!;
+    public List<GherkinSentence> Sentences => sentences;
     
     internal List<string> tags { get; init; }
     public List<string> Tags => tags;

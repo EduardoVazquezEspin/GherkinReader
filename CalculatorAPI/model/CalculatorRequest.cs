@@ -1,7 +1,7 @@
-namespace CalculatorAPI;
+namespace CalculatorAPI.model;
 
 public class CalculatorRequest
 {
-    public string Endpoint { get; init; }
-    public string Body { get; init; }
+    public string Endpoint { get; init; } = null!;
+    public string Body { get; init; } = null!;
 }

@@ -1,8 +1,9 @@
-﻿using CalculatorAPI.PostFix;
+﻿using CalculatorAPI.model;
+using CalculatorAPI.PostFix;
 
 namespace CalculatorAPI;
 
-public class CalculatorAPI : ICalculatorAPI
+public class CalculatorApi : ICalculatorApi
 {
     private const string PostFixEndpoint = "/postfix";
     private const string EndpointNotFound = "Endpoint not found";

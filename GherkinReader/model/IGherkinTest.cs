@@ -1,9 +1,9 @@
-namespace Gherkin;
+namespace GherkinReader.model;
 
 public interface IGherkinTest
 {
     public string Title { get; }
-    public List<IGherkinSentence> Sentences { get; }
+    public List<GherkinSentence> Sentences { get; }
     public List<string> Tags { get; }
     public string? Skip { get; }
 }

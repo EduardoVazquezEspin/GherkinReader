@@ -1,6 +1,8 @@
+using CalculatorAPI.model;
+
 namespace CalculatorAPI;
 
-public interface ICalculatorAPI
+public interface ICalculatorApi
 {
     public Task<CalculatorResponse> SendAsync(CalculatorRequest request);
 }

@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
-using Gherkin;
-using Gherkin.NUnit;
+using CalculatorAPI.model;
+using GherkinReader;
 
-namespace CalculatorAPI.Test;
+namespace CalculatorAPI.NUnit.Test.gherkinreader;
 
 public class CalculatorPostFixSteps : GherkinReader<CalculatorPostFixTestContext>
 {
@@ -10,7 +10,7 @@ public class CalculatorPostFixSteps : GherkinReader<CalculatorPostFixTestContext
     {
         Given("I am a user of Calculator API", context =>
         {
-            context.CalculatorApi = new CalculatorAPI();
+            context.CalculatorApi = new CalculatorApi();
         });
         
         Given("I am using postfix notation", context =>

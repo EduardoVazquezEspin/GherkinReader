@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Gherkin.parser;
 
 namespace GherkinReader.parser.idle;
 
@@ -7,7 +6,7 @@ internal class ParseTag<TContext> : IParser<TContext> where TContext : new()
 {
     private readonly Regex _tagsRegex = new (@"\s*@(?<tag>[^\s]+)\s*", RegexOptions.IgnoreCase);
 
-    public bool Parse(string line, GherkinParser<TContext> context)
+    bool IParser<TContext>.Parse(string line, GherkinParser<TContext> context)
     {
         var startIndex = 0;
         var tags = new List<string>();

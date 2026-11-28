@@ -1,4 +1,4 @@
-namespace Gherkin.parser;
+namespace GherkinReader.parser;
 
 internal interface IParser<TContext> where TContext : new()
 {

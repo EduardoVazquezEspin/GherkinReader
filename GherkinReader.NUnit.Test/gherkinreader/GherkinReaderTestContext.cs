@@ -1,6 +1,6 @@
-using Gherkin;
+using GherkinReader;
 
-namespace CalculatorAPI.Test;
+namespace CalculatorAPI.NUnit.Test.gherkinreader;
 
 public class GherkinReaderTestContext
 {

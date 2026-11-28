@@ -1,7 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using Gherkin.parser;
+using GherkinReader.model;
+using GherkinReader.parser;
 
-namespace Gherkin;
+namespace GherkinReader;
 
 internal enum Verb
 {
@@ -13,9 +14,9 @@ internal enum Verb
 public class GherkinReader<TContext> : IGherkinReader where TContext : new()
 {
 #region Given, When, Then syntax
-    private readonly List<Handler<TContext>> _givenHandlers = new();
-    private readonly List<Handler<TContext>> _whenHandlers = new();
-    private readonly List<Handler<TContext>> _thenHandlers = new();
+    private readonly List<Handler> _givenHandlers = new();
+    private readonly List<Handler> _whenHandlers = new();
+    private readonly List<Handler> _thenHandlers = new();
     
     private void Add(Verb verb, string sentence, Action<TContext> handler)
     {
@@ -95,7 +96,7 @@ public class GherkinReader<TContext> : IGherkinReader where TContext : new()
     protected void Then(Regex sentenceRegex, Func<TContext, Task>  handler) => Add(Verb.Then, sentenceRegex, handler);
     protected void When(Regex sentenceRegex, Func<TContext, Task>  handler) => Add(Verb.When, sentenceRegex, handler);
 
-    private void AddToVerb(Verb verb, Handler<TContext> handler)
+    private void AddToVerb(Verb verb, Handler handler)
     {
         switch(verb)
         {

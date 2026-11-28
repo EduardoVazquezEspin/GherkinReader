@@ -1,11 +1,11 @@
-﻿using CalculatorAPI.Test;
-using Gherkin;
-using Gherkin.NUnit;
+﻿using CalculatorAPI.NUnit.Test.gherkinreader;
+using GherkinReader.model;
+using GherkinReader.NUnit;
 
 namespace CalculatorAPI.NUnit.Test;
 
 [TestFixture]
-public class CalculatorAPITests
+public class CalculatorApiTests
 {
     private const string FilePath = "/resources/calculator.postfix.gherkin";
     
@@ -19,7 +19,7 @@ public class CalculatorAPITests
 
     [TestCaseSource(
         typeof(GherkinReaderNUnit<CalculatorPostFixSteps>), 
-        nameof(GherkinReaderNUnit<>.YieldTests),
+        nameof(GherkinReaderNUnit<CalculatorPostFixSteps>.YieldTests),
         new object[] {FilePath},
         Category = "Gherkin")
     ]

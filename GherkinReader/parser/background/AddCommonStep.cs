@@ -1,11 +1,13 @@
 using System.Text.RegularExpressions;
+using GherkinReader.model;
 
-namespace Gherkin.parser.background;
+namespace GherkinReader.parser.background;
 
 internal class AddCommonStep<TContext> : IParser<TContext> where TContext : new()
 {
     private readonly Regex _sentenceRegex = new(@"^\s*(?<verb>(Given|And))\s*(?<content>.*)\s*$", RegexOptions.IgnoreCase);
-    public bool Parse(string line, GherkinParser<TContext> context)
+
+    bool IParser<TContext>.Parse(string line, GherkinParser<TContext> context)
     {
         var match = _sentenceRegex.Match(line);
         if (!match.Success)
@@ -16,7 +18,7 @@ internal class AddCommonStep<TContext> : IParser<TContext> where TContext : new(
         if(handler is null)
             throw new Exception($"Step does not match any implementation: {line.Trim()}");
         
-        context.File.CommonSteps.Add(new GherkinSentence<TContext>
+        context.File.CommonSteps.Add(new GherkinSentence
         {
             Handler = handler,
             Groups = handlerMatch,

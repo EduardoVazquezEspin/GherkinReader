@@ -1,4 +1,6 @@
-namespace Gherkin;
+using GherkinReader.model;
+
+namespace GherkinReader;
 
 public interface IGherkinReader
 {

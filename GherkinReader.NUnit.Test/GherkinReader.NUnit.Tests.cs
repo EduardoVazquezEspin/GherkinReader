@@ -1,9 +1,10 @@
-using CalculatorAPI.Test;
-using Gherkin;
-using Gherkin.NUnit;
+using CalculatorAPI.NUnit.Test.gherkinreader;
+using GherkinReader.model;
+using GherkinReader.NUnit;
 
 namespace CalculatorAPI.NUnit.Test;
 
+// ReSharper disable once InconsistentNaming
 public class GherkinReader_NUnit_Tests
 {
     private const string FilePath = "/resources/gherkinreader.gherkin";
@@ -18,7 +19,7 @@ public class GherkinReader_NUnit_Tests
     
     [TestCaseSource(
         typeof(GherkinReaderNUnit<GherkinReaderSteps>), 
-        nameof(GherkinReaderNUnit<>.YieldTests),
+        nameof(GherkinReaderNUnit<GherkinReaderSteps>.YieldTests),
         new object[] {FilePath},
         Category = "Gherkin")
     ]

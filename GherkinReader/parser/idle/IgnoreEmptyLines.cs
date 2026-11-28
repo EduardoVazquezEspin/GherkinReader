@@ -1,8 +1,8 @@
-namespace Gherkin.parser.idle;
+namespace GherkinReader.parser.idle;
 
 internal class IgnoreEmptyLines<TContext> : IParser<TContext> where TContext : new()
 {
-    public bool Parse(string line, GherkinParser<TContext> context)
+    bool IParser<TContext>.Parse(string line, GherkinParser<TContext> context)
     {
         return string.IsNullOrWhiteSpace(line);
     }
